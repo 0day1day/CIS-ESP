@@ -1,0 +1,8 @@
+SOFTWARE\Microsoft\Windows\CurrentVersion\Run
+SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer\Run
+SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce
+SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnceEx
+SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon
+SOFTWARE\Microsoft\Terminal Server Client\Default
+SOFTWARE\Microsoft\Terminal Server Client\Servers
+SYSTEM\CurrentControlSet\Control\Terminal Server

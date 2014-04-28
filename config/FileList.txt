@@ -1,0 +1,4 @@
+C:\Windows\
+C:\Windows\System32\
+C:\Windows\Prefetch\
+C:\Windows\Temp\

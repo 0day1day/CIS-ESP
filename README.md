@@ -1,4 +1,114 @@
 CIS-ESP
 =======
 
-The Center for Internet Security Enumeration and Scanning Program
+The Center for Internet Security Enumeration and Scanning Program (CIS-ESP)
+
+CIS-ESP gathers information from Windows systems via WMI. Currently CIS-ESP supports the gathering of:
+-System Registry
+-User Registry
+-Application Compatibility Cache (Shim Cache)
+-Services
+-Service DLLs
+-Local Accounts
+-Local Admins
+-Directory/File Listings
+-Processes
+-Process Modules
+-Tasks
+-Netstat
+-DNS Cache
+-Existence of Known Bad Files (by File Name)
+-Shellbags
+
+CIS-ESP has two modes of operation: domain and standalone (single system). The domain version allows the user to specify an LDAP path for scanning while the standalone runs on the local system.
+
+CIS-ESP was written and tested on Python 2.7. The current modules require two third-party libraries:
+-WMI (https://pypi.python.org/pypi/WMI/#downloads)
+-active_directory (http://timgolden.me.uk/python/downloads/active_directory-0.6.7.zip)
+
+
+Setup:
+There are configuration files located in for the following modules:
+-System Registry
+-User Registry
+-Directory/File Listings
+-Existence of Known Bad Files (by File Name)
+
+If you compile the program into a standalone executable, you can later add additional indicator files in a directory named "CIS-Config" in the same directory as the executable without the need to recompile.
+
+The SystemRegistry.txt configuration file contains a case-insensitive, newline delimited list of SYSTEM or SOFTWARE Registry keys to gather from each system.
+SOFTWARE\Microsoft\Windows\CurrentVersion\Run
+SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce
+
+The UserRegistry.txt configuration file contains a case-insensitive, newline delimited list of NTUSER.DAT Registry keys to gather from each system. These keys are prepended with each user's Registry path during execution (ex. HKCU).
+\SOFTWARE\Sysinternals\PsExec
+\SOFTWARE\SimonTatham\PuTTY\SSHHostKeys
+
+The FileList.txt configuration file contains a case-insensitive, newline delimited list of directories to enumerate files.
+C:\Windows\Prefetch\
+C:\Windows\Temp\
+
+The DirectoryList.txt configuration file contains a case-insensitive, newline delimited list of directories to enumerate directories.
+C:\Program Files\
+C:\
+
+The DataExists.txt configuration file contains a case-insensitive, newline delimited list of full paths to known bad files.
+C:\Temp\Program\evil.exe
+C:\Program Files\Evil\backdoor.exe
+
+The UserDataExists.txt configuration file contains a case-insensitive, newline delimited list of relative paths (from each user's home directory) to known bad files.
+Desktop\ca_setup.exe
+ca_setup.exe
+
+The DataExists.txt and UserDataExists.txt files are used to check for additional compromised systems after indicators of compromise are discovered on some systems. This will help determine the full scope of a compromise.
+
+
+Usage:
+usage: cis-esp.py [-h] [-o DIR] [[-l LDAP] | [-i HOSTSFILE] | [-I OULISTFILE]] [-n NAME] [-x THREADS] [[--run TEST1,TEST2,...] | [--norun TEST1,TEST2,...] | [--tests BITSTRING]] [--listous]
+
+Center for Internet Security - Enumeration and Scanning Program (CIS-ESP)
+
+optional arguments:
+  -h, --help            show this help message and exit
+
+Domain or Standalone Version:
+  These arguments can be used on either version of the scripts. A GUI will automatically display if no arguments are given.
+
+  -o DIR, --output DIR  Path to store output. Must not have trailing slash. Example: "C:\My Folder".
+
+Domain Version Only:
+  These arguments will not have any affect on the standalone version. If LDAP path is not specified, it is assumed you are running the standalone version. If LDAP path is specified, it is assumed you are running the domain version.
+
+  -l LDAP, --ldap LDAP  Case sensitive LDAP path to OU. Example: "LDAP://OU="Ball Room",DC=Domain,DC=local". This will enumerate all sub-OU's as well.
+  -i HOSTSFILE, --hosts HOSTSFILE
+                        Specify the hosts file to skip enumerating an OU. Example: "hosts.txt".
+  -I OULISTFILE, --ous OULISTFILE
+                        Specify the OU list file to enumerate multiple separated OU's. Example: "ous.txt".
+  -n NAME, --name NAME  One word conventional name for scan. Example: "HR".
+  -x THREADS, --threads THREADS
+                        Number of threads to use. Use more than one at your own risk.
+
+Run Tests:
+  Select which tests to run or not to run. Choose only one option --run, --norun, or --tests. The possible tests for --run and --norun are: LocalAccounts, Processes, Shellbags, SystemRegistry, DirectoryList, UserDataExists, ShimCache, UserRegistry, Tasks, Netstat, ServiceDlls, FileList, DataExists, Services. If none of these options is chosen, all tests are run.
+
+  --run TEST1,TEST2,...
+                        List the tests you want to run. Example: "--run UserRegistry,SystemRegistry" will run only the user and system registry modules.
+  --norun TEST1,TEST2,...
+                        List the tests you don't want to run. Example: "--norun DataExists,Processes,Tasks" will run all modules except data exists, processes, and tasks.
+  --tests BITSTRING     1 or 0 for run or don't run test. Must have exactly 14 digits (the number of possible tests).
+
+Other Options:
+  Additional options that you can use.
+
+  --listous             If you want to enumerate the OUs without using the GUI or dsquery.
+
+
+
+Example:
+cis-esp.exe -l "LDAP://OU=Ball Room,DC=Domain,DC=local" -o "C:\Script Results" -n "Scan1" -x 4 --run UserRegistry,SystemRegistry,Services,DataExists,UserDataExists
+
+The above example will run the specified scripts on all systems in the Ball Room organizational unit of the Domain.local domain.
+A folder containing the results of this scan will be saved in the "C:\Script Results" directory.
+The folder name is specified by a timestamp, the name of the scan, and the domain. If the scan started at noon on March 1, 2014, the folder would be 20140301120000-Scan1-Domain.local.
+The scripts will be run with 4 separate threads (on 4 systems at the same time).
+The specified scripts are the user registry, system registry, services, data exists, and user data exists modules.

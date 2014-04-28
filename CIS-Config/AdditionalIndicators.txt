@@ -1,0 +1,11 @@
+##SystemRegistry
+
+##UserRegistry
+
+##FileList
+
+##DataExists
+
+##UserDataExists
+
+##DirectoryList

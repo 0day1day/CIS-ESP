@@ -1,0 +1,10 @@
+\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\ComputerDescriptions
+\SOFTWARE\Cain
+\SOFTWARE\Sysinternals\PsExec
+\SOFTWARE\Microsoft\Internet Explorer\TypedURLs
+\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\UserAssist
+\SOFTWARE\SimonTatham\PuTTY\SSHHostKeys
+\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Windows\Run
+\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer\Run
+\SOFTWARE\Microsoft\Windows\CurrentVersion\Run
+\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce
