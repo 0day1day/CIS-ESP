@@ -55,7 +55,7 @@ WIN8_MAGIC = '00ts'
 # Magic value used by Windows 8.1 and Server 2012 R2
 WIN81_MAGIC = '10ts'
 
-bad_entry_data = ''
+bad_entry_data = 'NULL'
 output_header  = ["Last Modified", "Last Update", "Path", "File Size", "Exec Flag"]
 
 # Shim Cache format used by Windows 5.2 and 6.0 (Server 2003 through Vista/Server 2008)

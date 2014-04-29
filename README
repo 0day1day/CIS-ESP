@@ -32,7 +32,7 @@ CIS-ESP gathers information from Windows systems via WMI. Currently CIS-ESP supp
 -Existence of Known Bad Files (by File Name)
 -Shellbags
 
-CIS-ESP has two modes of operation: domain and standalone (single system). The domain version allows the user to specify an LDAP path for scanning while the standalone runs on the local system.
+CIS-ESP has two modes of operation: domain and standalone (single system). The domain version allows the user to specify an LDAP path for scanning while the standalone runs on the local system. The standalone version can also be used in conjunction with group policy to run on all systems at the same time and save output to a shared location.
 
 CIS-ESP was written and tested on Python 2.7. The current modules require two third-party libraries:
 -WMI (https://pypi.python.org/pypi/WMI/#downloads)
@@ -76,7 +76,7 @@ The DataExists.txt and UserDataExists.txt files are used to check for additional
 
 
 Usage:
-usage: cis-esp.py [-h] [-o DIR] [[-l LDAP] | [-i HOSTSFILE] | [-I OULISTFILE]] [-n NAME] [-x THREADS] [[--run TEST1,TEST2,...] | [--norun TEST1,TEST2,...] | [--tests BITSTRING]] [--listous]
+cis-esp.py [-h] [-o DIR] [[-l LDAP] | [-i HOSTSFILE] | [-I OULISTFILE]] [-n NAME] [-x THREADS] [[--run TEST1,TEST2,...] | [--norun TEST1,TEST2,...] | [--tests BITSTRING]] [--listous]
 
 Center for Internet Security - Enumeration and Scanning Program (CIS-ESP)
 

@@ -26,11 +26,11 @@ def getTasks(computerName,objWMIService,hostPath):
 		
 		taskDaysOfMonth = support.convert_to_string(task.DaysOfMonth)
 		if taskDaysOfMonth == "None":
-			taskDaysOfMonth = ""
+			taskDaysOfMonth = "NULL"
 			
 		taskDaysOfWeek = support.convert_to_string(task.DaysOfWeek)
 		if taskDaysOfWeek == "None":
-			taskDaysOfWeek = ""
+			taskDaysOfWeek = "NULL"
 			
 		taskDescription = support.convert_to_string(task.Description)
 		
@@ -52,7 +52,7 @@ def getTasks(computerName,objWMIService,hostPath):
 		
 		taskPriority = support.convert_to_string(task.Priority)
 		if taskPriority == "None":
-			taskPriority = ""
+			taskPriority = "NULL"
 		
 		taskRunRepeatedly = support.convert_to_string(task.RunRepeatedly)
 		if taskRunRepeatedly.upper() == "TRUE":

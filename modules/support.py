@@ -115,10 +115,10 @@ def printReg(hive, value, type, key, outFile, objRegistry):
 	elif type == _winreg.REG_MULTI_SZ:
 		result,reg_value = objRegistry.GetMultiStringValue(hDefKey=hive,sSubKeyName=key,sValueName=value)
 	else:
-		reg_value = ""
+		reg_value = "OTHER_TYPE"
 	
 	if reg_value == None:
-		reg_value = ""
+		reg_value = "NULL"
 	
 	reg_value = convert_to_string(reg_value)
 	outFile.write(key.replace(","," ") + "," + value.replace(","," ") + "," + reg_value.replace(","," ") + "\n")
@@ -126,7 +126,7 @@ def printReg(hive, value, type, key, outFile, objRegistry):
 #convert windows datetime to nicely formatted date
 def convertDate(date):
 	if date == None or len(date) < 14:
-		return ""
+		return "NULL"
 		
 	year = date[0:4]
 	month = date[4:6]

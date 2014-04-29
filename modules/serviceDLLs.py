@@ -26,9 +26,9 @@ def getServiceDLLs(computerName,objRegistry,hostPath):
 	
 	if result == 0:
 		for subkey in subkeys:
-			display_name = ""
-			service_path = ""
-			service_dll = ""
+			display_name = "NULL"
+			service_path = "NULL"
+			service_dll = "NULL"
 			
 			result,valueNames,valueTypes = objRegistry.EnumValues(hDefKey=_winreg.HKEY_LOCAL_MACHINE,sSubKeyName=key+"\\"+subkey)
 			if result == 0:
@@ -37,15 +37,15 @@ def getServiceDLLs(computerName,objRegistry,hostPath):
 						if value.upper() == "DisplayName".upper():
 							result,display_name = objRegistry.GetStringValue(hDefKey=_winreg.HKEY_LOCAL_MACHINE,sSubKeyName=key+"\\"+subkey,sValueName=value)
 							if result != 0:
-								display_name = ""
+								display_name = "NULL"
 						elif value.upper() == "ImagePath".upper():
 							result,service_path = objRegistry.GetStringValue(hDefKey=_winreg.HKEY_LOCAL_MACHINE,sSubKeyName=key+"\\"+subkey,sValueName=value)
 							if result != 0:
-								service_path = ""
+								service_path = "NULL"
 							
 					result,service_dll = objRegistry.GetStringValue(hDefKey=_winreg.HKEY_LOCAL_MACHINE,sSubKeyName=key+"\\"+subkey+"\\Parameters",sValueName="ServiceDll")
 					if result != 0:
-						service_dll = ""
+						service_dll = "NULL"
 				
 				display_name = support.convert_to_string(display_name)
 				service_path = support.convert_to_string(service_path)

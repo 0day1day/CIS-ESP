@@ -50,7 +50,7 @@ RUN_ALL_TESTS = support.run_all_tests()
 possibleTests = support.getPossibleTests()
 
 #command line arguments with automatic -h help output
-parser = argparse.ArgumentParser(description="Center for Internet Security - Enumeration and Scanning Program (CIS-ESP)")
+parser = argparse.ArgumentParser(description="Center for Internet Security Enumeration and Scanning Program (CIS-ESP)")
 group = parser.add_argument_group("Domain or Standalone Version", "These arguments can be used on either version of the scripts. A GUI will automatically display if no arguments are given.")
 group.add_argument("-o", "--output", metavar="DIR", help="Path to store output. Must not have trailing slash. Example: \"C:\My Folder\".")
 domainGroup = parser.add_argument_group("Domain Version Only", "These arguments will not have any affect on the standalone version. If LDAP path is not specified, it is assumed you are running the standalone version. If LDAP path is specified, it is assumed you are running the domain version.")
