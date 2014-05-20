@@ -19,6 +19,7 @@ CIS-ESP gathers information from Windows systems via WMI. Currently CIS-ESP supp
 - DNS Cache
 - Existence of Known Bad Files (by File Name)
 - Shellbags
+- USB Device Enumeration
 
 CIS-ESP has two modes of operation: domain and standalone (single system). The domain version allows the user to specify an LDAP path for scanning while the standalone runs on the local system. The standalone version can also be used in conjunction with group policy to run on all systems at the same time and save output to a shared location.
 
@@ -95,7 +96,7 @@ The DataExists.txt and UserDataExists.txt files are used to check for additional
                         *Number of threads to use. Use more than one at your own risk.*
 
 #####Run Tests:
-  *Select which tests to run or not to run. Choose only one option --run, --norun, or --tests. The possible tests for --run and --norun are: LocalAccounts, Processes, Shellbags, SystemRegistry, DirectoryList, UserDataExists, ShimCache, UserRegistry, Tasks, Netstat, ServiceDlls, FileList, DataExists, Services. If none of these options is chosen, all tests are run.*
+  *Select which tests to run or not to run. Choose only one option --run, --norun, or --tests. The possible tests for --run and --norun are: LocalAccounts, Processes, Shellbags, SystemRegistry, DirectoryList, UserDataExists, ShimCache, UserRegistry, Tasks, Netstat, ServiceDlls, FileList, DataExists, Services, USBDevices. If none of these options is chosen, all tests are run.*
 
   --run TEST1,TEST2,...
                         *List the tests you want to run. Example: "--run UserRegistry,SystemRegistry" will run only the user and system registry modules.*
@@ -103,7 +104,7 @@ The DataExists.txt and UserDataExists.txt files are used to check for additional
   --norun TEST1,TEST2,...
                         *List the tests you don't want to run. Example: "--norun DataExists,Processes,Tasks" will run all modules except data exists, processes, and tasks.*
 
-  --tests BITSTRING     *1 or 0 for run or don't run test. Must have exactly 14 digits (the number of possible tests).*
+  --tests BITSTRING     *1 or 0 for run or don't run test. Must have exactly 15 digits (the number of possible tests).*
 
 #####Other Options:
   *Additional options that you can use.*

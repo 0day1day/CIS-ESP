@@ -28,6 +28,8 @@ from BinaryParser import OverrunBufferException
 from ShellItems import SHITEMLIST
 from ShellItems import ITEMPOS_FILEENTRY
 
+from modules import support
+
 class ShellbagException(Exception):
 	"""
 	Base Exception class for shellbag parsing.
@@ -135,11 +137,31 @@ def get_shellbags(objRegistry,hive,shell_key):
 	shellbag_rec(hive, bagmru_key, "", "")
 	return shellbags
 
-def getShellbags(objRegistry,hive,keys):
-	shellbags = []
-
-	for key in keys:
-		new_shellbags = get_shellbags(objRegistry,hive,key)
-		shellbags.extend(new_shellbags)
-
-	return shellbags
+def getShellbags(computerName,objRegistry,hostPath,registryList):
+	print computerName + " - checking shellbags"
+	userpath2 = ""
+	
+	for hive,username,userpath in registryList:
+		outFile = open(hostPath + "\SHELLBAGS-" + username + "-" + computerName + ".csv", "w")
+		outFile.write("path,created,modified,accessed\n")
+		
+		if hive == _winreg.HKEY_LOCAL_MACHINE:
+			print computerName + " - shellbags: checking logged out user (" + username + ")..."
+			userpath2 = userpath + "2"
+		elif hive == _winreg.HKEY_USERS:
+			print computerName + " - shellbags: checking logged in user (" + username + ")..."
+			userpath2 = userpath + "\Software\Classes"
+			
+		keys = [userpath + "\Software\Microsoft\Windows\Shell", userpath + "\Software\Microsoft\Windows\ShellNoRoam",
+			userpath2 + "\Local Settings\Software\Microsoft\Windows\Shell", userpath2 + "\Local Settings\Software\Microsoft\Windows\ShellNoRoam"]
+		
+		shellbags = []
+		
+		for key in keys:
+			new_shellbags = get_shellbags(objRegistry,hive,key)
+			shellbags.extend(new_shellbags)
+		
+		for shellbag in shellbags:
+			outFile.write(support.convert_to_string(shellbag["path"]).replace(","," ") + "," + support.convert_to_string(shellbag["crtime"]) + "," + 
+				support.convert_to_string(shellbag["mtime"]) + "," + support.convert_to_string(shellbag["atime"]) + "\n")
+		outFile.close()

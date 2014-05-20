@@ -99,9 +99,10 @@ def getDataExists(computerName,objWMIService,hostPath,tmpIndicators):
 			
 			colItems = objWMIService.ExecQuery(query)
 			
-			if len(colItems) > 0:
-				print computerName + " - FILE FOUND: " + f
-				outFile.write(f + ",1\n")
+			if colItems != None and len(colItems) > 0:
+				for colItem in colItems:
+					print computerName + " - FILE FOUND: " + f + ("" if f.upper()==colItem.Name.upper() else " (" + colItem.Name + ")")
+					outFile.write(colItem.Name + ",1\n")
 			else:
 				outFile.write(f + ",0\n")
 		

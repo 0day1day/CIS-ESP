@@ -22,6 +22,7 @@ import sys
 import tempfile
 import threading
 import time
+import _winreg
 
 #third party imports
 import wmi
@@ -44,6 +45,8 @@ from modules import retrieveNetstatAndDNS
 from modules import support
 from modules import rasGUI
 from modules import directoryList
+from modules import shellbags
+from modules import usbDevices
 
 #get the number of tests available
 RUN_ALL_TESTS = support.run_all_tests()
@@ -205,6 +208,7 @@ runShimCache = support.str2bool(tests[10])
 runUserDataExists = support.str2bool(tests[11])
 runDirectoryList = support.str2bool(tests[12])
 runShellbags = support.str2bool(tests[13])
+runUsbDevices = support.str2bool(tests[14])
 
 #create temporary files for the extra indicator lists
 tmpSystemRegFile = tempfile.TemporaryFile("w+")
@@ -240,22 +244,22 @@ if os.path.isdir(extraConfigDir):
 		pass
 
 tmpSystemRegFile.seek(0)
-tmpSystemReg = tmpSystemRegFile.readlines()
+tmpSystemReg = list(set(tmpSystemRegFile.readlines()))
 
 tmpUserRegFile.seek(0)
-tmpUserReg = tmpUserRegFile.readlines()
+tmpUserReg = list(set(tmpUserRegFile.readlines()))
 
 tmpFileListFile.seek(0)
-tmpFileList = tmpFileListFile.readlines()
+tmpFileList = list(set(tmpFileListFile.readlines()))
 
 tmpDataExistsFile.seek(0)
-tmpDataExists = tmpDataExistsFile.readlines()
+tmpDataExists = list(set(tmpDataExistsFile.readlines()))
 
 tmpUserDataExistsFile.seek(0)
-tmpUserDataExists = tmpUserDataExistsFile.readlines()
+tmpUserDataExists = list(set(tmpUserDataExistsFile.readlines()))
 
 tmpDirectoryListFile.seek(0)
-tmpDirectoryList = tmpDirectoryListFile.readlines()
+tmpDirectoryList = list(set(tmpDirectoryListFile.readlines()))
 
 #this method is called for each host in the domain version
 #it runs all the specified tests on that host and saves the output in a per host directory in the working path directory
@@ -302,12 +306,45 @@ def runScans(host, domainName):
 		hostTimeFile.write("Start: " + time.strftime("%m/%d/%Y %H:%M:%S") + "\n")
 	else:
 		hostErrorLog = errLog
+		
+	registryList = []
+	
+	if runUserRegistry or runShellbags or runUsbDevices:
+		key = "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\ProfileList"
+		result,subkeys = objRegistry.EnumKey(hDefKey=_winreg.HKEY_LOCAL_MACHINE,sSubKeyName=key)
+		
+		if result == 0:
+			for subkey in subkeys:
+				result,profile_path = objRegistry.GetExpandedStringValue(hDefKey=_winreg.HKEY_LOCAL_MACHINE,sSubKeyName=key+"\\"+subkey,sValueName="ProfileImagePath")
+				if result == 0 and ("Documents and Settings" in profile_path or "Users" in profile_path):
+					username = profile_path[profile_path.rindex("\\")+1:]
+					
+					hive,userpath = support.getLoginStatus(profile_path,subkey,username,objRegistry)
+					registryList.append([hive,username,userpath])
+					
+					if hive == _winreg.HKEY_LOCAL_MACHINE:
+						pid,result = objProcWMI2.Create(CommandLine="cmd.exe /c reg load HKLM\\" + username + " \"" + profile_path + "\\ntuser.dat\"")
+						if runShellbags:
+							pid,result = objProcWMI2.Create(CommandLine="cmd.exe /c reg load HKLM\\" + username + "2 \"" + profile_path + "\\AppData\\Local\\Microsoft\\Windows\\usrclass.dat\"")
 	
 	if runNetstatDNS:
 		netstatAndDNS.getNetstatAndDNS(computerName,hostErrorLog,objProcWMI)
 		
-	if runUserRegistry or runShellbags:
-		userRegistry.getUserRegistry(computerName,objRegistry,objProcWMI2,hostPath,tmpUserReg,runUserRegistry,runShellbags)
+	if runUserRegistry:
+		userRegistry.getUserRegistry(computerName,objRegistry,hostPath,tmpUserReg,registryList)
+		
+	if runShellbags:
+		shellbags.getShellbags(computerName,objRegistry,hostPath,registryList)
+		
+	if runUsbDevices:
+		usbDevices.getUsbDevices(computerName,objRegistry,hostPath,registryList)
+		
+	if runUserRegistry or runShellbags or runUsbDevices:
+		for hive,username,userpath in registryList:
+			if hive == _winreg.HKEY_LOCAL_MACHINE:
+				pid,result = objProcWMI2.Create(CommandLine="cmd.exe /c reg unload HKLM\\" + username)
+				if runShellbags:
+					pid,result = objProcWMI2.Create(CommandLine="cmd.exe /c reg unload HKLM\\" + username + "2")
 		
 	if runFileList:
 		fileList.getFileList(computerName,objWMIService,hostPath,tmpFileList)

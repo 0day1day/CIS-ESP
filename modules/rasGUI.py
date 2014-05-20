@@ -64,6 +64,8 @@ runDirectoryListVar = IntVar()
 runDirectoryListVar.set(1)
 runShellbagsVar = IntVar()
 runShellbagsVar.set(1)
+runUsbDevicesVar = IntVar()
+runUsbDevicesVar.set(1)
 
 def askdirectory():
 	"""Returns a selected directoryname."""
@@ -86,6 +88,7 @@ def selectAll():
 	runUserDataExistsVar.set(1)
 	runDirectoryListVar.set(1)
 	runShellbagsVar.set(1)
+	runUsbDevicesVar.set(1)
 
 def deselectAll():
 	runNsDnsVar.set(0)
@@ -102,6 +105,7 @@ def deselectAll():
 	runUserDataExistsVar.set(0)
 	runDirectoryListVar.set(0)
 	runShellbagsVar.set(0)
+	runUsbDevicesVar.set(0)
 
 def createGUI(standalone):
 	versionDescriptionLabel.pack_forget()
@@ -167,6 +171,9 @@ def createGUI(standalone):
 	runShellbagsCheck = Checkbutton(root, text="Shellbags", variable=runShellbagsVar)
 	runShellbagsCheck.pack()
 	
+	runUsbDevicesCheck = Checkbutton(root, text="Shellbags", variable=runUsbDevicesVar)
+	runUsbDevicesCheck.pack()
+	
 	Button(text='Select All', command=selectAll).pack(**button_opt)
 	Button(text='Deselect All', command=deselectAll).pack(**button_opt)
 	
@@ -219,7 +226,8 @@ def submitConfig():
 	testString = "" + str(runNsDnsVar.get()) + str(runUserAutostartVar.get()) + str(runFileListVar.get()) + \
 	str(runAutostartVar.get()) + str(runProcVar.get()) + str(runTasksVar.get()) + str(runServicesVar.get()) + \
 	str(runServiceDLLVar.get()) + str(runLocalAccountsVar.get()) + str(runDataExistsVar.get()) + \
-	str(runShimCacheVar.get()) + str(runUserDataExistsVar.get()) + str(runDirectoryListVar.get()) + str(runShellbagsVar.get())
+	str(runShimCacheVar.get()) + str(runUserDataExistsVar.get()) + str(runDirectoryListVar.get()) + \
+	str(runShellbagsVar.get() + str(runUsbDevicesVar.get()))
 	root.quit()
 
 standaloneButton = Button(text='Run Standalone Version', command=showStandaloneGUI)

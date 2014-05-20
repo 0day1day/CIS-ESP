@@ -35,7 +35,8 @@ test_dict_readable = {
 	"ShimCache": 10,
 	"UserDataExists": 11,
 	"DirectoryList": 12,
-	"Shellbags": 13
+	"Shellbags": 13,
+	"USBDevices": 14
 }
 
 test_dict = dict((k.lower(), v) for k,v in test_dict_readable.iteritems())
@@ -96,6 +97,13 @@ def convert_to_string(value):
 			return str(value)
 	except:
 		return ""
+
+def getLoginStatus(profile_path,profileSID,username,objRegistry):
+	result,subkeys = objRegistry.EnumKey(hDefKey=_winreg.HKEY_USERS,sSubKeyName=profileSID)
+	if result == 0:
+		return [_winreg.HKEY_USERS,profileSID]
+	else:
+		return [_winreg.HKEY_LOCAL_MACHINE,username]
 
 #works with the common types of registry keys
 def printReg(hive, value, type, key, outFile, objRegistry):
