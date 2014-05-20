@@ -47,7 +47,7 @@ def pollReg(computerName,hostPath,username,hive,userpath,objRegistry,tmpIndicato
 						outFile.write(key.replace(","," ") + ",EMPTY,EMPTY\n")
 					else:
 						for x in range(0,len(valueNames)):
-							support.printReg(hive, valueNames[x], valueTypes[x], key, outFile, objRegistry)
+							support.printReg(hive, valueNames[x], valueTypes[x], fullkey, outFile, objRegistry, key)
 			else:
 				outFile.write(key.replace(","," ") + ",DOES NOT EXIST,DOES NOT EXIST\n")
 				

@@ -171,7 +171,7 @@ def createGUI(standalone):
 	runShellbagsCheck = Checkbutton(root, text="Shellbags", variable=runShellbagsVar)
 	runShellbagsCheck.pack()
 	
-	runUsbDevicesCheck = Checkbutton(root, text="Shellbags", variable=runUsbDevicesVar)
+	runUsbDevicesCheck = Checkbutton(root, text="USB Device Enumeration", variable=runUsbDevicesVar)
 	runUsbDevicesCheck.pack()
 	
 	Button(text='Select All', command=selectAll).pack(**button_opt)
@@ -227,7 +227,7 @@ def submitConfig():
 	str(runAutostartVar.get()) + str(runProcVar.get()) + str(runTasksVar.get()) + str(runServicesVar.get()) + \
 	str(runServiceDLLVar.get()) + str(runLocalAccountsVar.get()) + str(runDataExistsVar.get()) + \
 	str(runShimCacheVar.get()) + str(runUserDataExistsVar.get()) + str(runDirectoryListVar.get()) + \
-	str(runShellbagsVar.get() + str(runUsbDevicesVar.get()))
+	str(runShellbagsVar.get()) + str(runUsbDevicesVar.get())
 	root.quit()
 
 standaloneButton = Button(text='Run Standalone Version', command=showStandaloneGUI)

@@ -106,22 +106,25 @@ def getLoginStatus(profile_path,profileSID,username,objRegistry):
 		return [_winreg.HKEY_LOCAL_MACHINE,username]
 
 #works with the common types of registry keys
-def printReg(hive, value, type, key, outFile, objRegistry):
+def printReg(hive, value, type, fullkey, outFile, objRegistry, key=None):
+	if not key:
+		key = fullkey
+		
 	if type == _winreg.REG_SZ:
-		result,reg_value = objRegistry.GetStringValue(hDefKey=hive,sSubKeyName=key,sValueName=value)
+		result,reg_value = objRegistry.GetStringValue(hDefKey=hive,sSubKeyName=fullkey,sValueName=value)
 	elif type == _winreg.REG_EXPAND_SZ:
-		result,reg_value = objRegistry.GetExpandedStringValue(hDefKey=hive,sSubKeyName=key,sValueName=value)
+		result,reg_value = objRegistry.GetExpandedStringValue(hDefKey=hive,sSubKeyName=fullkey,sValueName=value)
 	elif type == _winreg.REG_BINARY:
-		result,reg_value = objRegistry.GetBinaryValue(hDefKey=hive,sSubKeyName=key,sValueName=value)
+		result,reg_value = objRegistry.GetBinaryValue(hDefKey=hive,sSubKeyName=fullkey,sValueName=value)
 		r_value = ""
 		if result == 0:
 			for decimal in reg_value:
 				r_value += "%0.2X" % decimal
 		reg_value = "[BINARY DATA] " + r_value
 	elif type == _winreg.REG_DWORD:
-		result,reg_value = objRegistry.GetDWORDValue(hDefKey=hive,sSubKeyName=key,sValueName=value)
+		result,reg_value = objRegistry.GetDWORDValue(hDefKey=hive,sSubKeyName=fullkey,sValueName=value)
 	elif type == _winreg.REG_MULTI_SZ:
-		result,reg_value = objRegistry.GetMultiStringValue(hDefKey=hive,sSubKeyName=key,sValueName=value)
+		result,reg_value = objRegistry.GetMultiStringValue(hDefKey=hive,sSubKeyName=fullkey,sValueName=value)
 	else:
 		reg_value = "OTHER_TYPE"
 	
