@@ -139,8 +139,11 @@ def getUsbDevices(computerName,objRegistry,hostPath,registryList):
 	
 	inFileStr = "\\\\" + computerName + "\\C$\\Windows\\setupapi.log"
 	setupApiLog = ""
-	with open(inFileStr, "r") as inFile:
-		setupApiLog = inFile.read()
+	try:
+		with open(inFileStr, "r") as inFile:
+			setupApiLog = inFile.read()
+	except:
+		pass
 		
 	outFile.write("\nUSB Devices:\n")
 	for device in usbDevices:
