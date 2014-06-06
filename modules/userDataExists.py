@@ -34,7 +34,9 @@ def getUserDataExists(computerName,objWMIService,objRegistry,hostPath,tmpIndicat
 				userDirectories.append(user_home.replace("\\","\\\\"))
 			
 		configFile = support.resource_path("config\\UserDataExists.txt")
-		fileList = open(configFile, "r").readlines()
+		
+		with open(configFile, "r") as fileListFile:
+			fileList = fileListFile.readlines()
 		
 		fileList = fileList + tmpIndicators
 		

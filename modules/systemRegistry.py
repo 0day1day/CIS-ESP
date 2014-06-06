@@ -19,7 +19,10 @@ from modules import support
 def getSystemRegistry(computerName,objRegistry,hostPath,tmpIndicators):
 	print computerName + " - checking system Registry"
 	configFile = support.resource_path("config\\systemRegistry.txt")
-	keys = open(configFile, "r").readlines()
+	
+	with open(configFile, "r") as keysFile:
+		keys = keysFile.readlines()
+	
 	outFile = open(hostPath + "\SYSTEMREGISTRY-" + computerName + ".csv", "w")
 	outFile.write("reg_path,reg_key,reg_value\n")
 	

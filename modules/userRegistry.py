@@ -18,7 +18,10 @@ from modules import support
 
 def pollReg(computerName,hostPath,username,hive,userpath,objRegistry,tmpIndicators):
 	configFile = support.resource_path("config\\UserRegistry.txt")
-	keys = open(configFile, "r").readlines()
+	
+	with open(configFile, "r") as keysFile:
+		keys = keysFile.readlines()
+	
 	outFile = open(hostPath + "\USERREGISTRY-" + username + "-" + computerName + ".csv", "w")
 	outFile.write("reg_path,reg_key,reg_value\n")
 	

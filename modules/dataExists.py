@@ -47,7 +47,10 @@ def breakFile(fStr):
 def getDataExists(computerName,objWMIService,hostPath,tmpIndicators):
 	print computerName + " - checking for file existence"
 	configFile = support.resource_path("config\\DataExists.txt")
-	fileList = open(configFile, "r").readlines()
+	
+	with open(configFile, "r") as fileListFile:
+		fileList = fileListFile.readlines()
+	
 	outFile = open(hostPath + "\DATAEXISTS-" + computerName + ".csv", "w")
 	outFile.write("file,exists\n")
 	

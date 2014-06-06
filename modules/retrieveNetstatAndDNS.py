@@ -35,13 +35,13 @@ def retrieveNetstatAndDNS(computerName,hostErrorLog,objWMIService,objProcWMI,hos
 			time.sleep(1)
 			print computerName + " - waiting for DNS process to finish..."
 		
-		inFile = open(inFileStr, "r")
-		outFile.write(inFile.read())
-		inFile.close()
+		with open(inFileStr, "r") as inFile:
+			outFile.write(inFile.read())
 		objProcWMI.Create(CommandLine="cmd.exe /c copy nul C:\DNS.txt") #on some systems, the file can't be deleted remotely
-		outFile.close()
 	except Exception as ex:
 		hostErrorLog.write("retrieve DNS - " + str(ex) + "\n")
+	finally:
+		outFile.close()
 	
 	try:
 		outFile = open(hostPath + "\NETSTAT-" + computerName + ".txt", "w")
@@ -51,13 +51,13 @@ def retrieveNetstatAndDNS(computerName,hostErrorLog,objWMIService,objProcWMI,hos
 			time.sleep(1)
 			print computerName + " - waiting for netstat process to finish..."
 		
-		inFile = open(inFileStr, "r")
-		outFile.write(inFile.read())
-		inFile.close()
+		with open(inFileStr, "r") as inFile:
+			outFile.write(inFile.read())
 		objProcWMI.Create(CommandLine="cmd.exe /c copy nul C:\NS.txt") #on some systems, the file can't be deleted remotely
-		outFile.close()
 	except Exception as ex:
 		hostErrorLog.write("retrieve netstat - " + str(ex) + "\n")
+	finally:
+		outFile.close()
 	
 	try:
 		while isFileOpen("cmd.exe /c copy nul C:\\\\DNS.txt", computerName, objWMIService):

@@ -20,7 +20,9 @@ def getFileList(computerName,objWMIService,hostPath,tmpIndicators):
 	outFile = open(hostPath + "\FILELIST-" + computerName + ".csv", "w")
 	outFile.write("file,created,modified,last_accessed,size\n")
 	configFile = support.resource_path("config\\FileList.txt")
-	scanPaths = open(configFile, "r").readlines()
+	
+	with open(configFile, "r") as scanPathsFile:
+		scanPaths = scanPathsFile.readlines()
 	
 	scanPaths = scanPaths + tmpIndicators
 	

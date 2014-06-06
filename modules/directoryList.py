@@ -20,7 +20,9 @@ def getDirectoryList(computerName,objWMIService,hostPath,tmpIndicators):
 	outFile = open(hostPath + "\DIRECTORYLIST-" + computerName + ".csv", "w")
 	outFile.write("directory,created,modified,last_accessed\n")
 	configFile = support.resource_path("config\\DirectoryList.txt")
-	scanPaths = open(configFile, "r").readlines()
+	
+	with open(configFile, "r") as scanPathsFile:
+		scanPaths = scanPathsFile.readlines()
 	
 	scanPaths = scanPaths + tmpIndicators
 
